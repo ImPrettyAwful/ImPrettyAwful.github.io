@@ -1,0 +1,23 @@
+function findRegion() {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('13" M1 List'); // <=('Enter name of sheet')
+  const range = sheet.getRange('G:G'); // <= Enter Range of columns to Scan for data. 
+  const valuesOfSheet = range.getValues();
+  const valsArray = valuesOfSheet.flat();
+  const outputColumn = 8;
+
+  for (let i = 1; i < valsArray.length; i++){
+    if (/Japan|New Zealand|Australia|Singapore/.test(valsArray[i])){
+      sheet.getRange(i + 1,outputColumn).setValue("APAC");
+    } else if (/Canada|USA|Ottawa|Los Angeles/.test(valsArray[i])){
+      sheet.getRange(i + 1,outputColumn).setValue("NA");
+    } else if (/Israel/.test(valsArray[i])){
+      sheet.getRange(i + 1,outputColumn).setValue("Israel");
+    } else if (/^s*$/.test(valsArray[i])){
+      sheet.getRange(i + 1,outputColumn).setValue("N/A");
+    } else {
+      sheet.getRange(i + 1,outputColumn).setValue("EMEA");
+    }
+  }
+}
+
+//Note: /^s*$/ used to match empty cells
